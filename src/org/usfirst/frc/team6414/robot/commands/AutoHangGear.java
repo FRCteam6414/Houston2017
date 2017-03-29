@@ -21,7 +21,7 @@ public class AutoHangGear extends Command {
     /**
      * The initialize method is called just before the first time
      * this Command is run after being started.
-     * make sure robot will atop after 15s
+     * make sure robot will stop after 15s
      */
     protected void initialize() {
         this.setTimeout(AUTO_TIMEOUT2);
