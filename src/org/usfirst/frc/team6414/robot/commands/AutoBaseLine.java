@@ -67,7 +67,7 @@ public class AutoBaseLine extends Command {
      * @see Command#isTimedOut() isTimedOut()
      */
     protected boolean isFinished() {
-        return isTimedOut();
+        return USING_U_SENSOR ?Robot.uSensor.getDistant()<=10:isTimedOut();
     }
 
 
