@@ -3,56 +3,71 @@ package org.usfirst.frc.team6414.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team6414.robot.Robot;
 
+import static org.usfirst.frc.team6414.robot.RobotMap.*;
+
+
 /**
- * Created by willson on 2017/2/14.
+ * Created by willson on 2017/3/8.
  *
  * @author willson
  *         published under GNU Protocol
  */
-public class Mix extends Command {
-    public Mix() {
-        // Use requires() here to declare subsystem dependencies
-        requires(Robot.stirrer);
-    }
+public class AutoBaseLine extends Command {
 
+    public AutoBaseLine() {
+        requires(Robot.chassis);
+    }
 
     /**
      * The initialize method is called just before the first time
      * this Command is run after being started.
+     * make sure robot will atop after 15s
      */
     protected void initialize() {
-        System.out.println("mix command init");
+        this.setTimeout(AUTO_TIMEOUT2);
     }
 
+    /*
+     * constructor
+     * speed: max=1, min=0, f'(x)=-2sqrt(a)/(2sqrt(-x+a))
+     * f(x)=sqrt(-x+a)/sqrt(a) => sqrt(-x/a+1)
+     *
+     * @param distant distant form robot to the wall of control station (average)
+     * @return the speed it should go at a certain distance. Closer, slower.
+     */
+    private double getSpeed(double distant) {
+        return Math.sqrt(-distant / START_DISTANT + 1);
+    }
+
+    /*
+     * get turning speed
+     *
+     * @return From 0.5 to -0.5. Reach Max / Min when perform a 45 degree angle to the wall
+     */
+    private double getRotate() {
+        return Robot.limit(-1, 1,
+                (Robot.uSensor.getRightDistant() - Robot.uSensor.getLeftDistant())
+                        / 2 * Math.sqrt(2) * SENSOR_DIST);
+    }
 
     /**
      * The execute method is called repeatedly when this Command is
      * scheduled to run until this Command either finishes or is canceled.
+     * Make robot go at the speed we calculated above
      */
     protected void execute() {
-        Robot.stirrer.mix();
+        Robot.chassis.move(USING_U_SENSOR ?0:getRotate(), USING_U_SENSOR ?getSpeed(Robot.uSensor.getDistant()) : AUTO_DEF_SPEED);
     }
 
 
     /**
-     * <p>
-     * Returns whether this command is finished. If it is, then the command will be removed and
-     * {@link #end()} will be called.
-     * </p><p>
-     * It may be useful for a team to reference the {@link #isTimedOut()}
-     * method for time-sensitive commands.
-     * </p><p>
-     * Returning false will result in the command never ending automatically. It may still be
-     * cancelled manually or interrupted by another command. Returning true will result in the
-     * command executing once and finishing immediately. It is recommended to use
-     * {@link edu.wpi.first.wpilibj.command.InstantCommand} (added in 2017) for this.
-     * </p>
+     * Die at time out
      *
      * @return whether this command is finished.
      * @see Command#isTimedOut() isTimedOut()
      */
     protected boolean isFinished() {
-        return false;
+        return isTimedOut();
     }
 
 
@@ -61,9 +76,10 @@ public class Mix extends Command {
      * after {@link #isFinished()} returns true. This is where you may want to
      * wrap up loose ends, like shutting off a motor that was being used in the
      * command.
+     * Stop the chassis for safty reason
      */
     protected void end() {
-        Robot.stirrer.stop();
+        Robot.chassis.stop();
     }
 
 

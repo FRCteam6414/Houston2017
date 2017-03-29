@@ -11,9 +11,9 @@ import org.usfirst.frc.team6414.robot.RobotMap;
  * @author willson
  *         published under GNU Protocol
  */
-public class BaseLine extends Command {
+public class AutoHangGear extends Command {
 
-    public BaseLine() {
+    public AutoHangGear() {
         requires(Robot.chassis);
     }
 
@@ -23,7 +23,7 @@ public class BaseLine extends Command {
      * make sure robot will atop after 15s
      */
     protected void initialize() {
-        this.setTimeout(RobotMap.AUTO_TIMEOUT2);
+        this.setTimeout(RobotMap.AUTO_TIMEOUT);
     }
 
     /*
@@ -62,7 +62,6 @@ public class BaseLine extends Command {
 
     /**
      * Die at time out
-     *
      * @return whether this command is finished.
      * @see Command#isTimedOut() isTimedOut()
      */

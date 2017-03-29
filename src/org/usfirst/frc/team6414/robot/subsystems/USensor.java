@@ -75,7 +75,7 @@ public class USensor extends MonitoredSystem {
 
     @Override
     protected void initDefaultCommand() {
-//        setDefaultCommand(new HangGear());
+//        setDefaultCommand(new AutoHangGear());
     }
 }
 
