@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team6414.robot.commands.AutoBaseLine;
 import org.usfirst.frc.team6414.robot.commands.AutoHangGear;
+import org.usfirst.frc.team6414.robot.commands.AutoBaseLine;
 import org.usfirst.frc.team6414.robot.subsystems.*;
 
 /**
@@ -42,8 +42,8 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void robotInit() {
-        commandChooser.addDefault("gear", new AutoHangGear());
-        commandChooser.addObject("baseline", new AutoBaseLine());
+        commandChooser.addDefault("gear", new AutoBaseLine());
+        commandChooser.addObject("baseline", new AutoHangGear());
         SmartDashboard.putData("Auto", commandChooser);
 
         uSensorChooser.addDefault("use ultrasonic sensor", true);

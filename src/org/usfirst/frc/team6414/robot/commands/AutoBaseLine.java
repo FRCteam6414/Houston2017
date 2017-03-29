@@ -2,8 +2,7 @@ package org.usfirst.frc.team6414.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team6414.robot.Robot;
-
-import static org.usfirst.frc.team6414.robot.RobotMap.*;
+import org.usfirst.frc.team6414.robot.RobotMap;
 
 
 /**
@@ -24,7 +23,7 @@ public class AutoBaseLine extends Command {
      * make sure robot will atop after 15s
      */
     protected void initialize() {
-        this.setTimeout(AUTO_TIMEOUT2);
+        this.setTimeout(RobotMap.AUTO_TIMEOUT);
     }
 
     /*
@@ -35,20 +34,20 @@ public class AutoBaseLine extends Command {
      * @param distant distant form robot to the wall of control station (average)
      * @return the speed it should go at a certain distance. Closer, slower.
      */
-    private double getSpeed(double distant) {
-        return Math.sqrt(-distant / START_DISTANT + 1);
-    }
+//    private double speed(double distant) {
+//        return Math.sqrt(-distant / RobotMap.START_DISTANT + 1);
+//    }
 
     /*
      * get turning speed
      *
      * @return From 0.5 to -0.5. Reach Max / Min when perform a 45 degree angle to the wall
      */
-    private double getRotate() {
-        return Robot.limit(-1, 1,
-                (Robot.uSensor.getRightDistant() - Robot.uSensor.getLeftDistant())
-                        / 2 * Math.sqrt(2) * SENSOR_DIST);
-    }
+//    private double getRotate() {
+//        return Robot.limit(-1, 1,
+//                (Robot.uSensor.getRightDistant() - Robot.uSensor.getLeftDistant())
+//                        / 2 * Math.sqrt(2) * RobotMap.SENSOR_DIST);
+//    }
 
     /**
      * The execute method is called repeatedly when this Command is
@@ -56,18 +55,18 @@ public class AutoBaseLine extends Command {
      * Make robot go at the speed we calculated above
      */
     protected void execute() {
-        Robot.chassis.move(USING_U_SENSOR ?0:getRotate(), USING_U_SENSOR ?getSpeed(Robot.uSensor.getDistant()) : AUTO_DEF_SPEED);
+//        Robot.chassis.move(speed(Robot.uSensor.getDistant()), getRotate());
+        Robot.chassis.move(0, 0.5);
     }
 
 
     /**
      * Die at time out
-     *
      * @return whether this command is finished.
      * @see Command#isTimedOut() isTimedOut()
      */
     protected boolean isFinished() {
-        return USING_U_SENSOR ?Robot.uSensor.getDistant()<=10:isTimedOut();
+        return isTimedOut();
     }
 
 
