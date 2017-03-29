@@ -6,13 +6,13 @@ import org.usfirst.frc.team6414.robot.Robot;
 /**
  *
  */
-public class Intake extends Command {
+public class Climb extends Command {
 
     /**
      * Standard Constructor.
      */
-    public Intake() {
-        requires(Robot.intaker);
+    public Climb() {
+        requires(Robot.Climber);
     }
 
     /**
@@ -20,7 +20,7 @@ public class Intake extends Command {
      */
     @Override
     protected void initialize() {
-        System.out.println("Intake command init");
+        System.out.println("Climb command init");
     }
 
     /**
@@ -28,7 +28,7 @@ public class Intake extends Command {
      */
     @Override
     protected void execute() {
-        Robot.intaker.intake();
+        Robot.Climber.climb();
     }
 
     /**
@@ -44,7 +44,7 @@ public class Intake extends Command {
      */
     @Override
     protected void end() {
-        Robot.intaker.stop();
+        Robot.Climber.stop();
     }
 
     /**

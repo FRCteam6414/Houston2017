@@ -70,7 +70,7 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="jdk" jdkName="JavaSE-1.8" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="module-library">
       <library name="CTRLib.jar">
         <CLASSES>

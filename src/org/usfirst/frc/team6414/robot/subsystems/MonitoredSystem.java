@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6414.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.usfirst.frc.team6414.robot.Robot;
 
 /**
  * Created by willson on 2017/2/16.
@@ -38,7 +39,7 @@ public abstract class MonitoredSystem extends Subsystem {
      * @param sleepTime interval between two monitoring actions.
      */
     public void setSleepTime(long sleepTime) {
-        this.sleepTime = sleepTime;
+        this.sleepTime = (long)Robot.limit(0,1000,sleepTime);
     }
 
     /**

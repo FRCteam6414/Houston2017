@@ -23,9 +23,7 @@ public class Robot extends IterativeRobot {
 
     public static OI oi;
     public static final Chassis chassis = new Chassis();
-    public static final Shooter shooter = new Shooter();
-    public static final Intaker intaker = new Intaker();
-    public static final Stirrer stirrer = new Stirrer();
+    public static final Climber Climber = new Climber();
     public static final USensor uSensor = new USensor();
 
     private Command autonomousCommand;
@@ -57,14 +55,11 @@ public class Robot extends IterativeRobot {
         cam1.setFPS(60);
         SmartDashboard.putString("Robot State:", "started");
         System.out.println("Robot init");
+
+        chassis.setSleepTime(250);
         chassis.startMonitor();
-        intaker.startMonitor();
 
-        shooter.setSleepTime(100);
-        shooter.startMonitor();
-
-        stirrer.setSleepTime(300);
-        stirrer.startMonitor();
+        Climber.startMonitor();
 
         uSensor.setSleepTime(100);
         uSensor.startMonitor();
@@ -78,9 +73,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void disabledInit() {
         chassis.stopMonitor();
-        intaker.stopMonitor();
-        shooter.stopMonitor();
-        stirrer.stopMonitor();
+        Climber.stopMonitor();
         uSensor.stopMonitor();
     }
 

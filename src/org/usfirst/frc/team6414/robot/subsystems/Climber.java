@@ -4,25 +4,23 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team6414.robot.Robot;
 import org.usfirst.frc.team6414.robot.RobotMap;
-import org.usfirst.frc.team6414.robot.commands.Mix;
+import org.usfirst.frc.team6414.robot.commands.Climb;
 
+import static org.usfirst.frc.team6414.robot.subsystems.Climber.State.STOP;
 
 /**
- * Created by willson on 2017/2/14.
  *
- * @author willson
- *         published under GNU Protocol
  */
-public class Stirrer extends MonitoredSystem {
+public class Climber extends MonitoredSystem {
 
-    private CANTalon mixer = new CANTalon(RobotMap.MIXER_MOTOR);
-    private State state = State.STOP;
+    private CANTalon intakeMotor = new CANTalon(RobotMap.INTAKE_MOTOR);
+    private State state = STOP;
     private boolean privFwdButState = false, privBwdButState = false;
 
     enum State {
         FORWARD,
-        STOP,
-        BACKWARD;
+        BACKWARD,
+        STOP;
 
         public State fwdPressed() {
             if (this == FORWARD) {
@@ -41,32 +39,34 @@ public class Stirrer extends MonitoredSystem {
         }
     }
 
-
-    public Stirrer() {
+    public Climber() {
         super();
-        System.out.println("Mix sub system init");
-        threadInit(() -> SmartDashboard.putNumber("Stirrer speed:", mixer.get()));
+        System.out.println("Climb sub system init");
+        threadInit(() -> SmartDashboard.putNumber("Climb speed:", intakeMotor.get()));
     }
 
-    public void mix() {
+    public void climb() {
         switch (state) {
-            case FORWARD:
-                mixer.set(RobotMap.MIXER_DEF);
-                break;
             case BACKWARD:
-                mixer.set(-RobotMap.MIXER_DEF);
+                intakeMotor.set(-RobotMap.INTAKE_DEF);
                 break;
+
+            case FORWARD:
+                intakeMotor.set(RobotMap.INTAKE_DEF);
+                break;
+
             case STOP:
             default:
-                mixer.set(0);
+                intakeMotor.set(0);
+                break;
         }
-        if (Robot.oi.getButtonState(RobotMap.MIXER_FWD) != privFwdButState) {
+        if (Robot.oi.getButtonState(RobotMap.INTAKE_FWD) != privFwdButState) {
             privFwdButState = !privFwdButState;
             if (privFwdButState) {
                 state = state.fwdPressed();
             }
         }
-        if (Robot.oi.getButtonState(RobotMap.MIXER_BWD) != privBwdButState) {
+        if (Robot.oi.getButtonState(RobotMap.INTAKE_BWD) != privBwdButState) {
             privBwdButState = !privBwdButState;
             if (privBwdButState) {
                 state = state.bwdPressed();
@@ -74,13 +74,12 @@ public class Stirrer extends MonitoredSystem {
         }
     }
 
-
     public void stop() {
-        mixer.set(0);
+        intakeMotor.set(0);
     }
 
     public void initDefaultCommand() {
-        setDefaultCommand(new Mix());
+        setDefaultCommand(new Climb());
     }
 }
 
