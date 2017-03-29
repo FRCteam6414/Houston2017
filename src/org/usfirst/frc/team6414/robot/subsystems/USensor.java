@@ -13,7 +13,6 @@ import org.usfirst.frc.team6414.robot.RobotMap;
  */
 public class USensor extends MonitoredSystem {
 
-
     private DigitalOutput leftPulse;
     private Counter left;
     private double leftDistant = -1;
