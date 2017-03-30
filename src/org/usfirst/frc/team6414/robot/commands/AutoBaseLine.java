@@ -30,8 +30,7 @@ public class AutoBaseLine extends Command {
      * constructor
      * speed: max=1, min=0, f'(x)=-2sqrt(a)/(2sqrt(-x+a))
      * f(x)=sqrt(-x+a)/sqrt(a) => sqrt(-x/a+1)
-     *
-     * @param distant distant form robot to the wall of control station (average)
+     * @param distant distant from robot to the wall of control station (average)
      * @return the speed it should go at a certain distance. Closer, slower.
      */
 //    private double speed(double distant) {
