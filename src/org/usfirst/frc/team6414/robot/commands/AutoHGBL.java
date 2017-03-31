@@ -44,6 +44,7 @@ public class AutoHGBL extends Command {
         switch(state){
             case HANG_GEAR:
                 currentCommand=new AutoHangGear();
+                break;
             case TURN:
                 currentCommand=new Command(){
                     private boolean isFinished = false;

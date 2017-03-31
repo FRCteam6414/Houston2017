@@ -40,7 +40,7 @@ class ButtonManager {
     private static HashMap<Joystick, HashMap<Integer, JoystickButton>> buttons = new HashMap<>();
 
     private static JoystickButton getButton(Joystick stick, int port) {
-        buttons.putIfAbsent(new Joystick(stick.getPort()), new HashMap<>());
+        buttons.putIfAbsent(stick, new HashMap<>());
         buttons.get(stick).putIfAbsent(port, new JoystickButton(stick, port));
         return buttons.get(stick).get(port);
     }
