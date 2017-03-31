@@ -94,10 +94,10 @@ public class AutoHGBL extends Command {
                 };
                 break;
             case STOP:
+            default:
                 currentCommand.cancel();
                 isFinished=true;
                 break;
-            default:
         }
         currentCommand.start();
         state=state.getNext();
