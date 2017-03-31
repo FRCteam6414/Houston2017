@@ -13,7 +13,7 @@ import org.usfirst.frc.team6414.robot.Robot;
 public class AutoHGBL extends Command {
 
     private boolean isFinished = false;
-    private AutoState state = AutoState.HANG_GEAR;
+    private AutoState nextState = AutoState.HANG_GEAR;
     private Command currentCommand;
 
     public AutoHGBL() {
@@ -41,7 +41,7 @@ public class AutoHGBL extends Command {
     }
 
     private void startNextCommand(){
-        switch(state){
+        switch(nextState){
             case HANG_GEAR:
                 currentCommand=new AutoHangGear();
                 break;
@@ -59,8 +59,6 @@ public class AutoHGBL extends Command {
                             Robot.chassis.move(0,0.5);      //front
                         }else if(time<5){
                             Robot.chassis.move(-0.5,0);     //turn-rev
-                        }else if(time<8){
-                            Robot.chassis.move(0,0.5);      //front-baseline
                         }else{
                             Robot.chassis.move(0,0);
                             isFinished=true;
@@ -100,7 +98,7 @@ public class AutoHGBL extends Command {
                 break;
         }
         currentCommand.start();
-        state=state.getNext();
+        nextState = nextState.getNext();
     }
 
     /**
