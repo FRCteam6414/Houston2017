@@ -12,39 +12,18 @@ import org.usfirst.frc.team6414.robot.Robot;
  */
 public class AutoHGBL extends Command {
 
-    private Command currentCommand;
     private boolean isFinished = false;
-    private AutoHangGear ahg= new AutoHangGear();
     private AutoState state = AutoState.HANG_GEAR;
-    private Command turn = new Command(){
-        private boolean isFinished = false;
+    private Command currentCommand;
 
-        protected void execute() {
-            double time = this.timeSinceInitialized();
-            if(time<1){
-                Robot.chassis.move(0,-0.5);     //back
-            }else if(time<2){
-                Robot.chassis.move(0.5,0);      //turn
-            }else if(time<4){
-                Robot.chassis.move(0,0.5);      //front
-            }else if(time<5){
-                Robot.chassis.move(-0.5,0);     //turn-rev
-            }else if(time<8){
-                Robot.chassis.move(0,0.5);      //front-baseline
-            }else{
-                Robot.chassis.move(0,0);
-                isFinished=true;
-            }
-        }
+    public AutoHGBL() {
+        requires(Robot.chassis);
+    }
 
-        @Override
-        protected boolean isFinished() {
-            return isFinished;
-        }
-    };
     private enum AutoState{
         HANG_GEAR,
         TURN,
+        FORWARD,
         STOP;
 
         public AutoState getNext(){
@@ -52,6 +31,8 @@ public class AutoHGBL extends Command {
                 case HANG_GEAR:
                     return TURN;
                 case TURN:
+                    return FORWARD;
+                case FORWARD:
                 case STOP:
                 default:
                     return STOP;
@@ -59,30 +40,74 @@ public class AutoHGBL extends Command {
         }
     }
 
-    public AutoHGBL() {
-        requires(Robot.chassis);
-    }
+    private void startNextCommand(){
+        switch(state){
+            case HANG_GEAR:
+                currentCommand=new AutoHangGear();
+            case TURN:
+                currentCommand=new Command(){
+                    private boolean isFinished = false;
 
+                    protected void execute() {
+                        double time = this.timeSinceInitialized();
+                        if(time<1){
+                            Robot.chassis.move(0,-0.5);     //back
+                        }else if(time<2){
+                            Robot.chassis.move(0.5,0);      //turn
+                        }else if(time<4){
+                            Robot.chassis.move(0,0.5);      //front
+                        }else if(time<5){
+                            Robot.chassis.move(-0.5,0);     //turn-rev
+                        }else if(time<8){
+                            Robot.chassis.move(0,0.5);      //front-baseline
+                        }else{
+                            Robot.chassis.move(0,0);
+                            isFinished=true;
+                        }
+                    }
+
+                    @Override
+                    protected boolean isFinished() {
+                        return isFinished;
+                    }
+                };
+                break;
+            case FORWARD:
+                currentCommand=new Command(){
+                    private boolean isFinished = false;
+
+                    protected void execute() {
+                        double time = this.timeSinceInitialized();
+                        if(time<5){
+                            Robot.chassis.move(0,0.5);      //front-baseline
+                        }else{
+                            Robot.chassis.move(0,0);
+                            isFinished=true;
+                        }
+                    }
+
+                    @Override
+                    protected boolean isFinished() {
+                        return isFinished;
+                    }
+                };
+                break;
+            case STOP:
+                currentCommand.cancel();
+                isFinished=true;
+                break;
+            default:
+        }
+        currentCommand.start();
+        state=state.getNext();
+    }
 
     /**
      * The initialize method is called just before the first time
      * this Command is run after being started.
      */
     protected void initialize() {
-    }
-
-    protected void costumizedRun(){
-        switch (state){
-            case HANG_GEAR:
-                ahg.start();
-                break;
-            case TURN:
-                turn.start();
-                break;
-            case STOP:
-            default:
-                isFinished = true;
-        }
+        startNextCommand();
     }
 
     /**
@@ -90,6 +115,9 @@ public class AutoHGBL extends Command {
      * scheduled to run until this Command either finishes or is canceled.
      */
     protected void execute() {
+        if(!currentCommand.isRunning()){
+            startNextCommand();
+        }
     }
 
 
