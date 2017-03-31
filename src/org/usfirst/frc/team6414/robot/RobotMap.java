@@ -30,7 +30,7 @@ public class RobotMap {
     public static final double SPEED_OF_SOUND = 340;
     public static final double SENSOR_DIST = 100;
     public static final double START_DISTANT = 300;
-    public static final double AUTO_TIMEOUT = 2.5;
-    public static final double AUTO_TIMEOUT2 = 5;
+    public static final double AUTO_BL_TIMEOUT = 2.5;
+    public static final double AUTO_HG_TIMEOUT = 5;
     public static boolean USING_U_SENSOR = true;
 }

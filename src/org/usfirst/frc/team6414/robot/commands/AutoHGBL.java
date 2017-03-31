@@ -3,8 +3,6 @@ package org.usfirst.frc.team6414.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team6414.robot.Robot;
 
-import static org.usfirst.frc.team6414.robot.RobotMap.*;
-
 
 /**
  * Created by willson on 2017/3/8.
@@ -12,62 +10,96 @@ import static org.usfirst.frc.team6414.robot.RobotMap.*;
  * @author willson
  *         published under GNU Protocol
  */
-public class AutoHangGear extends Command {
+public class AutoHGBL extends Command {
 
-    public AutoHangGear() {
+    private Command currentCommand;
+    private boolean isFinished = false;
+    private AutoHangGear ahg= new AutoHangGear();
+    private AutoState state = AutoState.HANG_GEAR;
+    private Command turn = new Command(){
+        private boolean isFinished = false;
+
+        protected void execute() {
+            double time = this.timeSinceInitialized();
+            if(time<1){
+                Robot.chassis.move(0,-0.5);     //back
+            }else if(time<2){
+                Robot.chassis.move(0.5,0);      //turn
+            }else if(time<4){
+                Robot.chassis.move(0,0.5);      //front
+            }else if(time<5){
+                Robot.chassis.move(-0.5,0);     //turn-rev
+            }else if(time<8){
+                Robot.chassis.move(0,0.5);      //front-baseline
+            }else{
+                Robot.chassis.move(0,0);
+                isFinished=true;
+            }
+        }
+
+        @Override
+        protected boolean isFinished() {
+            return isFinished;
+        }
+    };
+    private enum AutoState{
+        HANG_GEAR,
+        TURN,
+        STOP;
+
+        public AutoState getNext(){
+            switch(this){
+                case HANG_GEAR:
+                    return TURN;
+                case TURN:
+                case STOP:
+                default:
+                    return STOP;
+            }
+        }
+    }
+
+    public AutoHGBL() {
         requires(Robot.chassis);
     }
+
 
     /**
      * The initialize method is called just before the first time
      * this Command is run after being started.
-     * make sure robot will stop after 15s
      */
     protected void initialize() {
-        this.setTimeout(AUTO_HG_TIMEOUT);
     }
 
-    /*
-     * constructor
-     * speed: max=1, min=0, f'(x)=-2sqrt(a)/(2sqrt(-x+a))
-     * f(x)=sqrt(-x+a)/sqrt(a) => sqrt(-x/a+1)
-     *
-     * @param distant distant form robot to the wall of control station (average)
-     * @return the speed it should go at a certain distance. Closer, slower.
-     */
-    private double getSpeed(double distant) {
-        return Math.sqrt(-distant / START_DISTANT + 1);
-    }
-
-    /*
-     * get turning speed
-     *
-     * @return From 0.5 to -0.5. Reach Max / Min when perform a 45 degree angle to the wall
-     */
-    private double getRotate() {
-        return Robot.limit(-1, 1,
-                (Robot.uSensor.getRightDistant() - Robot.uSensor.getLeftDistant())
-                        / 2 * Math.sqrt(2) * SENSOR_DIST);
+    protected void costumizedRun(){
+        switch (state){
+            case HANG_GEAR:
+                ahg.start();
+                break;
+            case TURN:
+                turn.start();
+                break;
+            case STOP:
+            default:
+                isFinished = true;
+        }
     }
 
     /**
      * The execute method is called repeatedly when this Command is
      * scheduled to run until this Command either finishes or is canceled.
-     * Make robot go at the speed we calculated above
      */
     protected void execute() {
-        Robot.chassis.move(USING_U_SENSOR ?0:getRotate(), USING_U_SENSOR ?getSpeed(Robot.uSensor.getDistant()) : AUTO_DEF_SPEED);
     }
 
 
     /**
-     * Die at time out
      *
      * @return whether this command is finished.
      * @see Command#isTimedOut() isTimedOut()
      */
     protected boolean isFinished() {
-        return USING_U_SENSOR ?Robot.uSensor.getDistant()<=10:isTimedOut();
+        return isFinished;
     }
 
 
@@ -76,10 +108,9 @@ public class AutoHangGear extends Command {
      * after {@link #isFinished()} returns true. This is where you may want to
      * wrap up loose ends, like shutting off a motor that was being used in the
      * command.
-     * Stop the chassis for safty reason
      */
     protected void end() {
-        Robot.chassis.stop();
+
     }
 
 

@@ -23,30 +23,8 @@ public class AutoBaseLine extends Command {
      * make sure robot will atop after 15s
      */
     protected void initialize() {
-        this.setTimeout(RobotMap.AUTO_TIMEOUT);
+        this.setTimeout(RobotMap.AUTO_BL_TIMEOUT);
     }
-
-    /*
-     * constructor
-     * speed: max=1, min=0, f'(x)=-2sqrt(a)/(2sqrt(-x+a))
-     * f(x)=sqrt(-x+a)/sqrt(a) => sqrt(-x/a+1)
-     * @param distant distant from robot to the wall of control station (average)
-     * @return the speed it should go at a certain distance. Closer, slower.
-     */
-//    private double speed(double distant) {
-//        return Math.sqrt(-distant / RobotMap.START_DISTANT + 1);
-//    }
-
-    /*
-     * get turning speed
-     *
-     * @return From 0.5 to -0.5. Reach Max / Min when perform a 45 degree angle to the wall
-     */
-//    private double getRotate() {
-//        return Robot.limit(-1, 1,
-//                (Robot.uSensor.getRightDistant() - Robot.uSensor.getLeftDistant())
-//                        / 2 * Math.sqrt(2) * RobotMap.SENSOR_DIST);
-//    }
 
     /**
      * The execute method is called repeatedly when this Command is
@@ -54,7 +32,6 @@ public class AutoBaseLine extends Command {
      * Make robot go at the speed we calculated above
      */
     protected void execute() {
-//        Robot.chassis.move(speed(Robot.uSensor.getDistant()), getRotate());
         Robot.chassis.move(0, 0.5);
     }
 
