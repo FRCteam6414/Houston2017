@@ -25,15 +25,6 @@ public class OI {
     public double getY() {
         return stick.getY();
     }
-
-    public double getThrottle() {
-        return stick.getThrottle();
-    }
-
-    public boolean getTrigger() {
-        return stick.getTrigger();
-    }
-
 }
 
 class ButtonManager {
