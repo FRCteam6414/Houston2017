@@ -1,6 +1,7 @@
 package org.usfirst.frc.team6414.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team6414.robot.Robot;
 
 import static org.usfirst.frc.team6414.robot.RobotMap.*;
@@ -24,7 +25,7 @@ public class AutoHangGear extends Command {
      * make sure robot will stop after 15s
      */
     protected void initialize() {
-        this.setTimeout(AUTO_HG_TIMEOUT);
+//        this.setTimeout(AUTO_HG_TIMEOUT);
     }
 
     /*
@@ -36,7 +37,7 @@ public class AutoHangGear extends Command {
      * @return the speed it should go at a certain distance. Closer, slower.
      */
     private double getSpeed(double distant) {
-        return Math.sqrt(-distant / START_DISTANT + 1);
+        return 0.5*Math.sqrt(distant-START_DISTANT / START_DISTANT );
     }
 
     /*
@@ -46,8 +47,8 @@ public class AutoHangGear extends Command {
      */
     private double getRotate() {
         return Robot.limit(-1, 1,
-                (Robot.uSensor.getRightDistant() - Robot.uSensor.getLeftDistant())
-                        / 2 * Math.sqrt(2) * SENSOR_DIST);
+                (Robot.uSensor.getRightDistant() - Robot.uSensor.getLeftDistant())*5
+                        /  (Math.sqrt(2)* SENSOR_DIST));
     }
 
     /**
@@ -56,7 +57,10 @@ public class AutoHangGear extends Command {
      * Make robot go at the speed we calculated above
      */
     protected void execute() {
-        Robot.chassis.move(USING_U_SENSOR ?0:getRotate(), USING_U_SENSOR ?getSpeed(Robot.uSensor.getDistant()) : AUTO_DEF_SPEED);
+//        Robot.chassis.move(getRotate(),getSpeed(Robot.uSensor.getDistant()));
+        SmartDashboard.putNumber("speed",getSpeed(Robot.uSensor.getDistant()) );
+        SmartDashboard.putNumber("Rotate",getRotate());
+        Robot.chassis.stop();
     }
 
 
@@ -67,7 +71,8 @@ public class AutoHangGear extends Command {
      * @see Command#isTimedOut() isTimedOut()
      */
     protected boolean isFinished() {
-        return USING_U_SENSOR ?Robot.uSensor.getDistant()<=10:isTimedOut();
+//        return USING_U_SENSOR ?Robot.uSensor.getDistant()<=10:isTimedOut();
+        return false;
     }
 
 

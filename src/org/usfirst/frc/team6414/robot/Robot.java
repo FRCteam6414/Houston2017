@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team6414.robot.commands.AutoHGBL;
 import org.usfirst.frc.team6414.robot.commands.AutoHangGear;
 import org.usfirst.frc.team6414.robot.commands.AutoBaseLine;
 import org.usfirst.frc.team6414.robot.subsystems.*;
@@ -29,7 +28,7 @@ public class Robot extends IterativeRobot {
 
     private Command autonomousCommand;
     private SendableChooser<Command> commandChooser = new SendableChooser<>();
-    private SendableChooser<Boolean> uSensorChooser = new SendableChooser<>();
+//    private SendableChooser<Boolean> uSensorChooser = new SendableChooser<>();
 
     public static double limit(double min, double max, double input) {
         return input > max ? max
@@ -43,23 +42,19 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void robotInit() {
-        commandChooser.addDefault("gear", new AutoBaseLine());
-        commandChooser.addObject("baseline", new AutoHangGear());
-        commandChooser.addObject("gear + baseline", new AutoHGBL());
+        commandChooser.addDefault("base", new AutoBaseLine());
+        commandChooser.addObject("gear", new AutoHangGear());
+//        commandChooser.addObject("gear + baseline", new AutoHGBL());
         SmartDashboard.putData("Auto", commandChooser);
-
-        uSensorChooser.addDefault("use ultrasonic sensor", true);
-        uSensorChooser.addObject("don't use ultrasonic sensor", false);
-        SmartDashboard.putData("ultrasonic state",uSensorChooser);
 
         oi = new OI();
 
-        UsbCamera cam = CameraServer.getInstance().startAutomaticCapture(0);
-        cam.setResolution(640, 480);
-        cam.setFPS(60);
-        UsbCamera cam1 = CameraServer.getInstance().startAutomaticCapture(1);
-        cam1.setResolution(640, 480);
-        cam1.setFPS(60);
+//        UsbCamera cam = CameraServer.getInstance().startAutomaticCapture(0);
+//        cam.setResolution(640, 480);
+//        cam.setFPS(60);
+//        UsbCamera cam1 = CameraServer.getInstance().startAutomaticCapture(1);
+//        cam1.setResolution(640, 480);
+//        cam1.setFPS(60);
         SmartDashboard.putString("Robot State:", "started");
         System.out.println("Robot init");
 
@@ -68,8 +63,8 @@ public class Robot extends IterativeRobot {
 
         Climber.startMonitor();
 
-        uSensor.setSleepTime(100);
-        uSensor.startMonitor();
+//        uSensor.setSleepTime(100);
+//        uSensor.startMonitor();
     }
 
     /**
@@ -81,7 +76,7 @@ public class Robot extends IterativeRobot {
     public void disabledInit() {
         chassis.stopMonitor();
         Climber.stopMonitor();
-        uSensor.stopMonitor();
+//        uSensor.stopMonitor();
     }
 
     @Override
@@ -103,7 +98,7 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         autonomousCommand = commandChooser.getSelected();
-        RobotMap.USING_U_SENSOR = uSensorChooser.getSelected();
+//        RobotMap.USING_U_SENSOR = uSensorChooser.getSelected();
         autonomousCommand.start();
     }
 
@@ -121,7 +116,9 @@ public class Robot extends IterativeRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        autonomousCommand.cancel();
+        if(autonomousCommand!=null){
+            autonomousCommand.cancel();
+        }
     }
 
     /**
