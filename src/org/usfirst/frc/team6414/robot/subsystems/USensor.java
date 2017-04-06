@@ -1,9 +1,11 @@
 package org.usfirst.frc.team6414.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Counter;
-import edu.wpi.first.wpilibj.DigitalOutput;
+//import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team6414.robot.RobotMap;
+import org.usfirst.frc.team6414.robot.commands.USensorMonitor;
 
 /**
  * Created by willson on 2017/3/11.
@@ -11,50 +13,14 @@ import org.usfirst.frc.team6414.robot.RobotMap;
  * @author willson
  *         published under GNU Protocol
  */
-public class USensor extends MonitoredSystem {
+public class USensor extends Subsystem {
 
-    private DigitalOutput leftPulse;
-    private Counter left;
-    private double leftDistant = -1;
-
-    private DigitalOutput rightPulse;
-    private Counter right;
-    private double rightDistant = -1;
+    private Ultrasonic l = new Ultrasonic(RobotMap.LEFT_PULSE,RobotMap.LEFT_ECHO);
+    private Ultrasonic r = new Ultrasonic(RobotMap.RIGHT_PULSE,RobotMap.RIGHT_ECHO);
 
     public USensor() {
-        leftPulse = new DigitalOutput(RobotMap.LEFT_PULSE);
-        left = new Counter(RobotMap.LEFT_ECHO);
-        left.setMaxPeriod(1);
-        left.setSemiPeriodMode(true);
-        left.reset();
-
-        rightPulse = new DigitalOutput(RobotMap.RIGHT_PULSE);
-        right = new Counter(RobotMap.RIGHT_ECHO);
-        right.setMaxPeriod(1);
-        right.setSemiPeriodMode(true);
-        right.reset();
-
-        threadInit(() -> {
-            leftPulse.pulse(RobotMap.US_PULSE);
-            rightPulse.pulse(RobotMap.US_PULSE);
-
-            do {
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } while (left.get() < 2 || right.get() < 2);
-
-            leftDistant = left.getPeriod() * 0.5 * RobotMap.SPEED_OF_SOUND;
-            rightDistant = right.getPeriod() * 0.5 * RobotMap.SPEED_OF_SOUND;
-
-            SmartDashboard.putNumber("left dis", leftDistant);
-            SmartDashboard.putNumber("right dis", rightDistant);
-
-            left.reset();
-            right.reset();
-        });
+        l.setAutomaticMode(true);
+        r.setAutomaticMode(true);
     }
 
     private double square(double in) {
@@ -62,20 +28,22 @@ public class USensor extends MonitoredSystem {
     }
 
     public double getLeftDistant() {
-        return leftDistant;
+        return l.getRangeMM()/10;
     }
 
     public double getRightDistant() {
-        return rightDistant;
+        return r.getRangeMM()/10;
     }
 
     public double getDistant() {
-        return (0.5 * RobotMap.SENSOR_DIST * (leftDistant + rightDistant)) / Math.sqrt(square(RobotMap.SENSOR_DIST) + square(leftDistant - rightDistant));
+        return (0.5 * RobotMap.SENSOR_DIST * (l.getRangeMM()/10 + r.getRangeMM()/10))
+                / Math.sqrt(square(RobotMap.SENSOR_DIST)
+                + square(l.getRangeMM()/10 - r.getRangeMM()/10));
     }
 
     @Override
     protected void initDefaultCommand() {
-//        setDefaultCommand(new AutoBaseLine());
+        setDefaultCommand(new USensorMonitor());
     }
 }
 
