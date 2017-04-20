@@ -12,7 +12,7 @@ public class Climb extends Command {
      * Standard Constructor.
      */
     public Climb() {
-        requires(Robot.Climber);
+        requires(Robot.climber);
     }
 
     /**
@@ -28,7 +28,7 @@ public class Climb extends Command {
      */
     @Override
     protected void execute() {
-        Robot.Climber.climb();
+        Robot.climber.climb();
     }
 
     /**
@@ -44,7 +44,7 @@ public class Climb extends Command {
      */
     @Override
     protected void end() {
-        Robot.Climber.stop();
+        Robot.climber.stop();
     }
 
     /**

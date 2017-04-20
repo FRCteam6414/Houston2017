@@ -1,62 +1,50 @@
 package org.usfirst.frc.team6414.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team6414.robot.Robot;
+import org.usfirst.frc.team6414.robot.RobotMap;
 
-import static org.usfirst.frc.team6414.robot.RobotMap.SENSOR_DIST;
 
 /**
- * Created by willson on 2017/4/6.
+ * Created by willson on 2017/3/8.
  *
  * @author willson
  *         published under GNU Protocol
  */
-public class USensorMonitor extends Command {
-    public USensorMonitor() {
-        requires(Robot.uSensor);
-    }
+public class BaseLine extends Command {
 
+    public BaseLine() {
+        requires(Robot.chassis);
+    }
 
     /**
      * The initialize method is called just before the first time
      * this Command is run after being started.
+     * make sure robot will atop after 15s
      */
     protected void initialize() {
-
+        this.setTimeout(RobotMap.BL_TIMEOUT);
     }
 
 
     /**
      * The execute method is called repeatedly when this Command is
      * scheduled to run until this Command either finishes or is canceled.
+     * Make robot go at the speed we calculated above
      */
     protected void execute() {
-        SmartDashboard.putNumber("l",Robot.uSensor.getLeftDistant());
-        SmartDashboard.putNumber("r",Robot.uSensor.getRightDistant());
-        SmartDashboard.putNumber("dis",Robot.uSensor.getDistant());
+        Robot.chassis.move(0, 0.5);
     }
 
 
     /**
-     * <p>
-     * Returns whether this command is finished. If it is, then the command will be removed and
-     * {@link #end()} will be called.
-     * </p><p>
-     * It may be useful for a team to reference the {@link #isTimedOut()}
-     * method for time-sensitive commands.
-     * </p><p>
-     * Returning false will result in the command never ending automatically. It may still be
-     * cancelled manually or interrupted by another command. Returning true will result in the
-     * command executing once and finishing immediately. It is recommended to use
-     * {@link edu.wpi.first.wpilibj.command.InstantCommand} (added in 2017) for this.
-     * </p>
+     * Die at time out
      *
      * @return whether this command is finished.
      * @see Command#isTimedOut() isTimedOut()
      */
     protected boolean isFinished() {
-        return false;
+        return isTimedOut();
     }
 
 
@@ -65,9 +53,10 @@ public class USensorMonitor extends Command {
      * after {@link #isFinished()} returns true. This is where you may want to
      * wrap up loose ends, like shutting off a motor that was being used in the
      * command.
+     * Stop the chassis for safty reason
      */
     protected void end() {
-
+        Robot.chassis.stop();
     }
 
 

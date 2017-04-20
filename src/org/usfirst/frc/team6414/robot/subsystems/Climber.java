@@ -13,7 +13,7 @@ import static org.usfirst.frc.team6414.robot.subsystems.Climber.State.STOP;
  */
 public class Climber extends MonitoredSystem {
 
-//    private CANTalon climbMotor = new CANTalon(RobotMap.CLIMBER_MOTOR);
+    private CANTalon climbMotor = new CANTalon(RobotMap.CLIMBER_MOTOR);
     private State state = STOP;
     private boolean privFwdButState = false, privBwdButState = false;
 
@@ -42,23 +42,22 @@ public class Climber extends MonitoredSystem {
     public Climber() {
         super();
         System.out.println("Climb sub system init");
-        threadInit(() -> SmartDashboard.putNumber("Climb speed:", 1/*climbMotor.get()*/));
+        threadInit(() -> SmartDashboard.putNumber("Climb speed:", climbMotor.get()));
     }
 
     public void climb() {
         switch (state) {
             case BACKWARD:
-//                climbMotor.set(-RobotMap.INTAKE_DEF);
+                climbMotor.set(-RobotMap.INTAKE_DEF);
                 break;
 
             case FORWARD:
-//                climbMotor.set(RobotMap.INTAKE_DEF);
+                climbMotor.set(RobotMap.INTAKE_DEF);
                 break;
 
             case STOP:
             default:
-//                climbMotor.set(0);
-//                break;
+                climbMotor.set(0);
         }
         if (Robot.oi.getButtonState(RobotMap.INTAKE_FWD) != privFwdButState) {
             privFwdButState = !privFwdButState;
@@ -75,7 +74,7 @@ public class Climber extends MonitoredSystem {
     }
 
     public void stop() {
-//        climbMotor.set(0);
+        climbMotor.set(0);
     }
 
     public void initDefaultCommand() {

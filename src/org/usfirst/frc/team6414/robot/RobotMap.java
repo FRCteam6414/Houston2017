@@ -22,15 +22,13 @@ public class RobotMap {
     public static final double INTAKE_DEF = 1;              //Default speed
     public static final double AUTO_DEF_SPEED = 0.5;
 
-    public static final double US_PULSE = 0.00001;          //others
-    public static final int LEFT_ECHO = 0;
-    public static final int LEFT_PULSE = 1;
-    public static final int RIGHT_ECHO = 2;
-    public static final int RIGHT_PULSE = 3;
-    public static final double SPEED_OF_SOUND = 340;
+
+    //    public static final int LEFT_ECHO = 0;                //others
+//    public static final int LEFT_PULSE = 1;
+//    public static final int RIGHT_ECHO = 2;
+//    public static final int RIGHT_PULSE = 3;
     public static final double SENSOR_DIST = 100;
     public static final double START_DISTANT = 284;
-    public static final double AUTO_BL_TIMEOUT = 2.5;
-    public static final double AUTO_HG_TIMEOUT = 5;
-    public static boolean USING_U_SENSOR = true;
+    public static final double BL_TIMEOUT = 2.5;
+    public static final double HG_TIMEOUT = 5;
 }

@@ -2,7 +2,8 @@ package org.usfirst.frc.team6414.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team6414.robot.Robot;
-import org.usfirst.frc.team6414.robot.RobotMap;
+
+import static org.usfirst.frc.team6414.robot.RobotMap.HG_TIMEOUT;
 
 
 /**
@@ -11,21 +12,21 @@ import org.usfirst.frc.team6414.robot.RobotMap;
  * @author willson
  *         published under GNU Protocol
  */
-public class AutoBaseLine extends Command {
+public class HangGear extends Command {
 
-    public AutoBaseLine() {
+    public HangGear() {
         requires(Robot.chassis);
     }
 
     /**
      * The initialize method is called just before the first time
      * this Command is run after being started.
-     * make sure robot will atop after 15s
+     * make sure robot will stop after 15s
      */
     protected void initialize() {
-        this.setTimeout(RobotMap.AUTO_BL_TIMEOUT);
+        this.setTimeout(HG_TIMEOUT);
+        Robot.chassis.move(0, 0.5);
     }
-
 
     /**
      * The execute method is called repeatedly when this Command is
@@ -33,12 +34,12 @@ public class AutoBaseLine extends Command {
      * Make robot go at the speed we calculated above
      */
     protected void execute() {
-        Robot.chassis.move(0, 0.5);
     }
 
 
     /**
      * Die at time out
+     *
      * @return whether this command is finished.
      * @see Command#isTimedOut() isTimedOut()
      */
