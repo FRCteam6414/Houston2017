@@ -2,6 +2,7 @@ package org.usfirst.frc.team6414.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team6414.robot.Robot;
+import org.usfirst.frc.team6414.robot.RobotMap;
 
 import static org.usfirst.frc.team6414.robot.RobotMap.HG_TIMEOUT;
 
@@ -25,7 +26,7 @@ public class HangGear extends Command {
      */
     protected void initialize() {
         this.setTimeout(HG_TIMEOUT);
-        Robot.chassis.move(0, 0.5);
+        Robot.chassis.move(0, RobotMap.AUTO_DEF_SPEED);
     }
 
     /**

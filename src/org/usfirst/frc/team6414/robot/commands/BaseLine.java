@@ -33,7 +33,7 @@ public class BaseLine extends Command {
      * Make robot go at the speed we calculated above
      */
     protected void execute() {
-        Robot.chassis.move(0, 0.5);
+        Robot.chassis.move(0, RobotMap.AUTO_DEF_SPEED);
     }
 
 
