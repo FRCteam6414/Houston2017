@@ -11,6 +11,7 @@ public class RobotMap {
     public static final int INTAKE_FWD = 3;
     public static final int INTAKE_BWD = 5;
     static final int STICK = 0;
+    public static final int SLOW_CLIMB =  8;
 
     public static final int RIGHT_MASTER = 1;               //Motors
     public static final int RIGHT_SLAVE = 2;
@@ -29,6 +30,6 @@ public class RobotMap {
 //    public static final int RIGHT_PULSE = 3;
     public static final double SENSOR_DIST = 100;
     public static final double START_DISTANT = 284;
-    public static final double BL_TIMEOUT = 2.5;
-    public static final double HG_TIMEOUT = 5;
+    public static final double BL_TIMEOUT = 5;
+    public static final double HG_TIMEOUT = 2.5;
 }

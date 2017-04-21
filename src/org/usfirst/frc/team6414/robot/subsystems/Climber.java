@@ -49,9 +49,14 @@ public class Climber extends MonitoredSystem {
     public void climb() {
         switch (state) {
             case BACKWARD:
-                climbMotor.set(-RobotMap.INTAKE_DEF);
+                if (Robot.oi.getButtonState(RobotMap.SLOW_CLIMB)){
+                    climbMotor.set(-RobotMap.INTAKE_DEF*0.5);
+                } else{
+                    climbMotor.set(-RobotMap.INTAKE_DEF);
+                }
+//                climbMotor.set(-RobotMap.INTAKE_DEF*
+//                      (Robot.oi.getButtonState(RobotMap.SLOW_CLIMB)?0.5:1));
                 break;
-
             case FORWARD:
                 climbMotor.set(RobotMap.INTAKE_DEF);
                 break;
