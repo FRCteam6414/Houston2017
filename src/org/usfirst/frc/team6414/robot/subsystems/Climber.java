@@ -23,11 +23,12 @@ public class Climber extends MonitoredSystem {
         STOP;
 
         public State fwdPressed() {
-            if (this == FORWARD) {
-                return STOP;
-            } else {
-                return FORWARD;
-            }
+            return STOP;
+//            if (this == FORWARD) {
+//                return STOP;
+//            } else {
+//                return FORWARD;
+//            }
         }
 
         public State bwdPressed() {
