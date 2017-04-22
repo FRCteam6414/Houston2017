@@ -55,7 +55,7 @@ public class Climber extends MonitoredSystem {
                     climbMotor.set(-RobotMap.INTAKE_DEF);
                 }
 //                climbMotor.set(-RobotMap.INTAKE_DEF*
-//                      (Robot.oi.getButtonState(RobotMap.SLOW_CLIMB)?0.5:1));
+//                     (Robot.oi.getButtonState(RobotMap.SLOW_CLIMB)?0.5:1));
                 break;
             case FORWARD:
                 climbMotor.set(RobotMap.INTAKE_DEF);
